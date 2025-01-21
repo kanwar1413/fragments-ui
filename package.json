@@ -1,0 +1,22 @@
+{
+  "name": "fragments-ui",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Fragments UI testing web app",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://kanwar1413/fragments-ui.git"
+  },
+  "author": "Kanwar Preet Kaur",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "oidc-client-ts": "^3.1.0"
+  },
+  "devDependencies": {
+    "parcel": "^2.13.3"
+  }
+}
