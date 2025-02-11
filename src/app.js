@@ -57,8 +57,7 @@ async function init() {
   if (!user) {
     getFragments.disabled = true;
     getFragmentById.querySelector('button').disabled = true;
-    postFragmentImg.querySelector('button').disabled = true;
-   
+    
     return;
   }
   
