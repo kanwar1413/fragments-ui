@@ -15,6 +15,28 @@
     </section>
     <section hidden id="user">
       <h2>Hello <span class="username"></span>!</h2>
+      <!-- Form for searching fragment by ID -->
+      <form id="getFragmentById">
+        <label for="fragmentId">Fragment ID:</label>
+        <input type="text" name="id" id="fragmentId" required />
+        <button type="submit">Search Fragment</button>
+      </form>
+      
+<br> <br>
+      <button id="getFragments">Get All Fragments</button>
+      
+      <!-- Displaying the fetched fragment data -->
+      <pre id="getContainer"></pre>
+      <br> <br>
+      <!-- Form for posting a new fragment -->
+      <form id="postFragmentTxt">
+        <label for="fragmentText">Text:</label>
+        <input type="text" name="value" id="fragmentText" required />
+        <button type="submit">Post Fragment</button>
+      </form>
+
+      <!-- Displaying posted fragment data -->
+      <pre id="postContainer"></pre>
     </section>
   </body>
 </html>
