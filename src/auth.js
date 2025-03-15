@@ -18,15 +18,17 @@ const cognitoAuthConfig = {
 const userManager = new UserManager({
   ...cognitoAuthConfig,
 });
+export async function signOut() {
+  // Trigger a redirect to the Cognito sign-out page
+  await userManager.signoutRedirect({client_id: process.env.AWS_COGNITO_CLIENT_ID,
+    logout_uri: './logout.html',
+  });
+}
 
 export async function signIn() {
   // Trigger a redirect to the Cognito auth page, so user can authenticate
   await userManager.signinRedirect();
-}
-
-export async function signOut(){
-  await userManager.signoutRedirect();
-}
+};
 
 // Create a simplified view of the user, with an extra method for creating the auth headers
 function formatUser(user) {
