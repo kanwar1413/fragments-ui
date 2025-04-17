@@ -5,6 +5,28 @@
     <title>Fragments UI</title>
     <link rel="stylesheet" href="https://unpkg.com/bamboo.css" />
     <script type="module" src="./app.js"></script>
+    <style>
+      .section-container {
+        border: 1px solid #100303;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+      .section-heading {
+        margin-top: 0;
+        border-bottom: 2px solid #666;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+      }
+      .result-container {
+        background-color: #120202;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        max-height: 300px;
+        overflow: auto;
+      }
+    </style>
   </head>
   <body>
     <h1>Fragments UI</h1>
@@ -17,40 +39,148 @@
     <section hidden id="user">
       <h2>Hello <span class="username"></span>!</h2>
       
-      <!-- Form for searching fragment by ID -->
-      <form id="getFragmentById">
-        <label for="fragmentId">Fragment ID:</label>
-        <input type="text" name="id" id="fragmentId" required />
+      <!-- GET Section -->
+      <div class="section-container">
+        <h3 class="section-heading">GET - Retrieve Fragments</h3>
+        
+        <!-- Form for searching fragment by ID -->
+        <form id="getFragmentById">
+          <label for="fragmentId">Fragment ID:</label>
+          <input type="text" name="id" id="fragmentId" required />
+          <br>
+          <button type="submit" name="withInfo">Get Fragment Info</button>
+          <button type="submit">Get Fragment</button>
+        </form>
+        
         <br>
-        <button type="submit" name="withInfo">Get Fragment Info</button>
-        <button type="submit">Get Fragment</button>
-      </form>
-
-      <br> <br>
-      <button id="getFragments">Get All Fragments</button>
-      <button id="getFragmentsExp">Get Expanded Fragments</button> <!-- New button -->
-     
-      <!-- Displaying the fetched fragment data -->
-      <pre id="getContainer"></pre>
-      <br> <br>
+        <button id="getFragments">Get All Fragments</button>
+        <button id="getFragmentsExp">Get Expanded Fragments</button>
+        
+        <!-- Display container for GET results -->
+        <div class="result-container" id="getContainer"></div>
+      </div>
       
-      <!-- Form for posting a new fragment -->
-      <form id="postFragmentTxt">
-        <label for="fragmentType">Text:</label>
-        <select name="type" id="fragmentType" required>
-          <option value="text/plain">Text</option>
-          <option value="application/json">JSON</option>
-          <option value="text/markdown">Markdown</option>
-        </select>
-        <br>
-        <label for="fragmentContent">Content:</label>
-        <textarea name="value" id="fragmentContent" required></textarea>
-        <br>
-        <button type="submit">Post Fragment</button>
-      </form>
+      <!-- DOWNLOAD Section -->
+      <div class="section-container">
+        <h3 class="section-heading">DOWNLOAD - Save Fragments</h3>
+        
+        <!-- Form for downloading fragment with conversion -->
+        <form id="downloadFragment">
+          <label for="downloadFragmentId">Fragment ID to download:</label>
+          <input type="text" name="id" id="downloadFragmentId" required />
+          <br>
+          <label for="conversionFormat">Convert to format (optional):</label>
+          <select name="format" id="conversionFormat">
+            <option value="">Original format</option>
+            <option value="txt">Plain Text (.txt)</option>
+            <option value="md">Markdown (.md)</option>
+            <option value="html">HTML (.html)</option>
+            <option value="json">JSON (.json)</option>
+            <option value="png">PNG Image (.png)</option>
+            <option value="jpg">JPEG Image (.jpg)</option>
+            <option value="webp">WebP Image (.webp)</option>
+            <option value="gif">GIF Image (.gif)</option>
+          </select>
+          <br>
+          <button type="submit">Download Fragment</button>
+        </form>
+        
+        <!-- Display container for download results -->
+        <div class="result-container" id="downloadContainer"></div>
+      </div>
+      
+      <!-- UPDATE Section -->
+      <div class="section-container">
+        <h3 class="section-heading">UPDATE - Modify Fragments</h3>
+        
+        <!-- Form for updating fragment -->
+        <form id="updateFragment">
+          <label for="updateFragmentId">Fragment ID to update:</label>
+          <input type="text" name="id" id="updateFragmentId" required />
+          <br>
+          <label for="updateFragmentType">Content Type:</label>
+          <select name="type" id="updateFragmentType" required>
+            <option value="text/plain">Text</option>
+            <option value="application/json">JSON</option>
+            <option value="text/markdown">Markdown</option>
+            <option value="text/html">HTML</option>
+          </select>
+          <br>
+          <label for="updateFragmentContent">New Content:</label>
+          <textarea name="value" id="updateFragmentContent" required></textarea>
+          <br>
+          <button type="submit">Update Fragment</button>
+        </form>
+        
+        <!-- Display container for update results -->
+        <div class="result-container" id="updateContainer"></div>
+      </div>
+      
+      <!-- POST TEXT Section -->
+      <div class="section-container">
+        <h3 class="section-heading">POST - Create Text Fragments</h3>
+        
+        <!-- Form for posting a new text fragment -->
+        <form id="postFragmentTxt">
+          <label for="fragmentType">Text Fragment:</label>
+          <select name="type" id="fragmentType" required>
+            <option value="text/plain">Text</option>
+            <option value="application/json">JSON</option>
+            <option value="text/markdown">Markdown</option>
+            <option value="text/html">HTML</option>
+            <option value="text/csv">CSV</option>
+          </select>
+          <br>
+          <label for="fragmentContent">Content:</label>
+          <textarea name="value" id="fragmentContent" required></textarea>
+          <br>
+          <button type="submit">Post Text Fragment</button>
+        </form>
+        
+        <!-- Display container for text post results -->
+        <div class="result-container" id="postTextContainer"></div>
+      </div>
+      
+      <!-- POST IMAGE Section -->
+      <div class="section-container">
+        <h3 class="section-heading">POST - Create Image Fragments</h3>
+        
+        <!-- Form for posting an image fragment -->
+        <form id="postFragmentImg">
+          <label for="imageType">Image Fragment:</label>
+          <select name="type" id="imageType" required>
+            <option value="image/png">PNG</option>
+            <option value="image/jpeg">JPEG</option>
+            <option value="image/webp">WebP</option>
+            <option value="image/gif">GIF</option>
+          </select>
+          <br>
+          <label for="imageFile">Select Image:</label>
+          <input type="file" name="file" id="imageFile" accept="image/*" required />
+          <br>
+          <button type="submit">Post Image Fragment</button>
+        </form>
+        
+        
+        <!-- Display container for image post results -->
+        <div class="result-container" id="postImageContainer"></div>
+      </div>
+          <!-- DELETE Section -->
+      <div class="section-container">
+        <h3 class="section-heading">DELETE - Remove Fragment</h3>
 
-      <!-- Displaying posted fragment data -->
-      <pre id="postContainer"></pre>
+        <!-- Form for deleting a fragment -->
+        <form id="deleteFragmentById">
+          <label for="deleteFragmentId">Fragment ID:</label>
+          <input type="text" name="id" id="deleteFragmentId" required />
+          <br>
+          <button type="submit">Delete Fragment</button>
+        </form>
+
+        <!-- Display container for delete results -->
+        <div class="result-container" id="deleteContainer"></div>
+      </div>
+
     </section>
   </body>
 </html>

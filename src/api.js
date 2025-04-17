@@ -33,10 +33,10 @@ export async function getUserFragments(user) {
  * Posts a new fragment for the authenticated user.
  *
  * @param {Object} user - The authenticated user.
- * @param {Object} text - The fragment text to be posted.
+ * @param {Object} fragment - The fragment to be posted (contains type and value properties).
  * @returns {string} - The response data from the API.
  */
-export async function postFragment_API(user, text) {
+export async function postFragment_API(user, fragment) {
   console.log('Posting fragments data...');
   try {
     const res = await fetch(`${apiUrl}/v1/fragments`, {
@@ -44,9 +44,9 @@ export async function postFragment_API(user, text) {
       method: 'POST',
       headers: {
         Authorization: user.authorizationHeaders().Authorization,
-        'Content-Type': text.type,
+        'Content-Type': fragment.type,
       },
-      body: text.value,
+      body: fragment.value,
     });
     // Catching Known Errors
     if (res.status === 404 || res.status === 415) {
@@ -75,6 +75,57 @@ export async function postFragment_API(user, text) {
     };
   }
 }
+
+/**
+ * Updates a fragment with the given ID.
+ * 
+ * @param {Object} user - The authenticated user.
+ * @param {string} id - The ID of the fragment to update.
+ * @param {Object} fragment - The fragment data to update (contains type and value).
+ * @returns {Object} - The response data from the API.
+ */
+export async function updateFragment_API(user, id, fragment) {
+  console.log('Updating fragment data...');
+  try {
+    const res = await fetch(`${apiUrl}/v1/fragments/${id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: user.authorizationHeaders().Authorization,
+        'Content-Type': fragment.type,
+      },
+      body: fragment.value,
+    });
+    
+    // Handle known error codes
+    if (res.status === 404 || res.status === 400) {
+      let data = await res.json();
+      return {
+        data,
+        type: 'json',
+      };
+    }
+    
+    // Handle unknown errors
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`);
+    }
+    
+    // Handle successful response
+    const data = await res.json();
+    console.log('Got update response', data);
+    return {
+      data,
+      type: 'json',
+    };
+  } catch (err) {
+    console.error('Unable to call PUT /v1/fragments/:id', { err });
+    return {
+      type: 'json',
+      data: { error: err.message },
+    };
+  }
+}
+
 export async function getFragmentById_API(user, id) {
   console.log('Requesting to get fragment data..');
   try {
@@ -113,6 +164,57 @@ export async function getFragmentById_API(user, id) {
     }
   } catch (err) {
     console.error('Unable to call GET /v1/fragment', { err });
+    return {
+      type: 'json',
+      data: { error: err.message },
+    };
+  }
+}
+
+/**
+ * Downloads a fragment with optional conversion.
+ * 
+ * @param {Object} user - The authenticated user.
+ * @param {string} id - The ID of the fragment to download.
+ * @param {string} extension - Optional extension for conversion.
+ * @returns {Object} - The blob data and content type.
+ */
+export async function downloadFragment_API(user, id, extension = '') {
+  console.log('Downloading fragment data...');
+  try {
+    // Format the URL with extension if provided
+    const extensionPart = extension ? `.${extension}` : '';
+    const res = await fetch(`${apiUrl}/v1/fragments/${id}${extensionPart}`, {
+      headers: user.authorizationHeaders(),
+    });
+    
+    // Handle error responses
+    if (res.status === 404 || res.status === 415) {
+      let data = await res.json();
+      return {
+        data,
+        type: 'json',
+      };
+    }
+    
+    // Handle unknown errors
+    if (!res.ok) {
+      throw new Error(`${res.status} ${res.statusText}`);
+    }
+    
+    // Get the content type to determine how to handle the response
+    const contentType = res.headers.get('Content-Type');
+    
+    // Create a blob from the response
+    const blob = await res.blob();
+    
+    return {
+      blob,
+      contentType,
+      filename: `fragment-${id}${extensionPart}`,
+    };
+  } catch (err) {
+    console.error('Unable to download fragment', { err });
     return {
       type: 'json',
       data: { error: err.message },
@@ -175,5 +277,20 @@ export async function getFragmentsExp_API(user) {
   } catch (err) {
     console.error('Unable to call GET /v1/fragment', { err });
     return { error: err.message };
+  }
+}
+
+export async function deleteFragmentById_API(user, id) {
+  try {
+    const res = await fetch(`${apiUrl}/v1/fragments/${id}`, {
+      method: 'DELETE',
+      // Generate headers with the proper Authorization bearer token to pass
+      headers: user.authorizationHeaders(),
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(`Unable to call DELETE /v1/fragmens/${id}`, { error });
+    return { error: error.message };
   }
 }

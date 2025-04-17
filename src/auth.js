@@ -19,10 +19,11 @@ const userManager = new UserManager({
   ...cognitoAuthConfig,
 });
 export async function signOut() {
-  // Trigger a redirect to the Cognito sign-out page
-  await userManager.signoutRedirect({client_id: process.env.AWS_COGNITO_CLIENT_ID,
-    logout_uri: './logout.html',
-  });
+  await userManager.removeUser();
+  const clientId = process.env.AWS_COGNITO_CLIENT_ID;
+  const logoutUri = process.env.OAUTH_SIGN_IN_REDIRECT_URL;
+  const cognitoDomain = process.env.AWS_COGNITO_DOMAIN;
+  window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
 }
 
 export async function signIn() {
