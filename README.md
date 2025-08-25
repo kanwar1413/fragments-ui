@@ -1,8 +1,9 @@
 # Fragments-ui
 
-This repository contains the Fragments Frontend, a lightweight web client for the Fragments API Server
-.
+This repository contains the Fragments Frontend, a lightweight web client for the Fragments API Server.
 It allows authenticated users to log in with Amazon Cognito, then create, retrieve, update, download, and delete fragments (text, JSON, Markdown, HTML, and images).
+This project works together with the Fragments Backend (https://github.com/kanwar1413/fragments) .
+Make sure both are running for full functionality.
 
 ---
 ## Features
